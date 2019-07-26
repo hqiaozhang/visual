@@ -1,0 +1,19 @@
+
+.vis-network {
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin-left: 45px;
+  // height: 100vh;
+  height: calc(100% - 70px);
+  // background: #28386C;
+}
+.vis-network.bg1 {
+  background-image: url(./images/bg1.png);
+}
+
+.vis-network.white {
+  background: rgb(240, 240, 240);
+}
+.vis-network.blue {
+  background: #28386C
+}

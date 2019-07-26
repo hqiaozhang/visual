@@ -1,0 +1,31 @@
+.left-toolbar {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 45px;
+  height: 100%;
+  background-color: #373456;
+}
+.left-toolbar > ul {
+  padding: 0;
+}
+.left-toolbar li {
+  display: block;
+  font-size: 18px;
+  text-align: center;
+  height: 35px;
+  color: #ccc9c9;
+  line-height: 35px;
+  cursor: pointer;
+  padding: 0;
+}
+.left-toolbar >ul > li i.fa, .bottom-toolbar >ul > li i.fa {
+  margin: 0!important;
+}
+.left-toolbar li.end {
+  border-bottom: 1px solid #4b4e79;
+  margin-bottom: 3px;
+}
+.right-panel > span >label {
+  color: #4bab58;
+}

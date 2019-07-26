@@ -1,0 +1,49 @@
+.main {
+  background: #fff;
+  position: absolute;
+  float: left;
+  left: 200px;
+  right: 0px;
+  top: 50px;
+  bottom: 0px;
+  padding: 8px;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+  -webkit-transition-duration: 0.3s;
+  -webkit-transition-timing-function: ease;
+  overflow: auto;
+  .grid-stack > .grid-stack-item {
+    display: inline-block !important;
+  }
+  .widget {
+    border: 1px solid #e0dede;
+    clear: both;
+    margin-top: 0px;
+    margin-bottom: 30px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+  }
+}
+.main .container-fluid {
+  padding-right: 0px;
+  padding-left: 0px;
+  margin-bottom: 100px;
+  min-height: 500px;
+  background: #fff;
+  border: 1px solid #dfe4e9;
+  padding: 8px;
+}
+.grid-stack {
+  position: relative;
+  width: 100%;
+  // height: 100%;
+  min-height: 320px;
+}
+.grid-stack > .grid-stack-item {
+  min-width: 8.33333333%;
+  // position: absolute;
+  margin-right: 10px;
+  padding: 0;
+  display: none;
+}
