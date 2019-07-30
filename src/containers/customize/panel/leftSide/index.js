@@ -25,6 +25,8 @@ class LeftSide extends Component {
         return <BarCharts.BaseBar id={id} />;
       case 'StacBar':
         return <BarCharts.StacBar id={id} />;
+      case 'tacBar':
+        return <BarCharts.StacBar id={id} />;
       default:
         return <BarCharts.StacBar id={id} />;
     }
@@ -44,7 +46,6 @@ class LeftSide extends Component {
     const isShow = curmenu[parentIndex].children[index].show; // 在新对象里面修改，然后赋值给需要改变的对象
     console.log(index, parentIndex, isShow);
     if (document.getElementById(`grid${uuid}`) || isShow === false) {
-      console.log('falsefalse');
       // ev.target.remveChild(document.getElementById(`grid${uuid}`));
       return;
     }
@@ -80,14 +81,12 @@ class LeftSide extends Component {
       const {parentIndex, subIndex} = this.state;
       console.log('parentIndex, subIndex', parentIndex, subIndex);
       const curmenu = this.state.menuData; // 给对象赋值出来
-      curmenu[parentIndex].children[subIndex].show = false; // 在新对象里面修改，然后赋值给需要改变的对象
       console.log('xxxxx', curmenu[parentIndex].children[subIndex].show);
-      // curmenu[parentIndex].children[subIndex].show = false; // 在新对象里面修改，然后赋值给需要改变的对象
+
       // this.setState({
       //   menuData: curmenu
       // });
     }
-    // console.log(nextProps.uuid, this.props.uuid);
   }
   /**
    * @description 渲染子菜单

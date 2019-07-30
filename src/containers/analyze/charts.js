@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import echarts from 'echarts';
 import {hours, station, stationData} from './data';
+import json from './data2.json';
 
+console.log(json.result);
 const symbolSize = [5, 8, 16, 24, 32, 40];
 const colors = ['#77E750', '#FFDF02', '#F67825', '#F93148', '#A4036E', '#690000'];
 export default class charts extends Component {
