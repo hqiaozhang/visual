@@ -13,7 +13,7 @@
     "react/jsx-closing-tag-location": ["off"],
     "comma-dangle": ["off", "never"],
     "spaced-comment": ["off", "always"],
-    "func-names": ["off"],
+    "func-names": ["on"], // 定义多个func
     "react/jsx-quotes": ["off"],
     "jsx-quotes": ["error"],
     "indent": ["error", 2, {"SwitchCase": 1}],

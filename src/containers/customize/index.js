@@ -4,28 +4,33 @@
  * @Email: 991034150@qq.com
  * @Description: 自定义
  * @Last Modified by: zhanghongqiao
- * @Last Modified time: 2019-07-26 17:23:39
+ * @Last Modified time: 2019-08-12 16:54:55
  */
 
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Header, LeftSide} from './panel';
+import EditableTable from './panel/leftSide/charts/table'
 import './index.scss';
 
 class Customize extends Component {
-  allowDrop(ev) {
-    // this.props.dispatch({type: 'UPDATEUUID'});
+ 
+  dragOver(ev) {
+ 
     ev.preventDefault();
+    
   }
-
+  dragEnd(ev) {
+    console.log('xxxx')
+  }
   drop(ev) {
     ev.preventDefault();
     const data = ev.dataTransfer.getData('Text');
     if (!data) {
       return;
     }
-    ev.target.appendChild(document.getElementById(data));
-    // this.props.dispatch({type: 'ISDRAG', flag: false});
+    var sourceNode = document.getElementById(data)
+    ev.target.appendChild(sourceNode);
   }
   render() {
     return (
@@ -33,8 +38,9 @@ class Customize extends Component {
         <Header />
         <LeftSide />
         <div className="main" >
+        {/* <EditableTable/> */}
           <div id="graph-panel" className="container-fluid" >
-            <div id="chart-wrap" className="grid-stack" onDrop={this.drop.bind(this)} onDragOver={this.allowDrop.bind(this)} />
+            <div id="chart-wrap" className="grid-stack" onDrop={this.drop.bind(this)} onDragEnd={this.dragEnd.bind(this)} onDragOver={this.dragOver.bind(this)} />
           </div>
         </div>
       </React.Fragment>

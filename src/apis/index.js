@@ -1,6 +1,6 @@
-import * as studyunitApi from './studyunit';
-
+ 
+import fetchBaseChart from './baseChart'
 export default {
-  ...studyunitApi
+  fetchBaseChart
 };
 

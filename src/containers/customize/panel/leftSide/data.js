@@ -6,6 +6,7 @@ const menuData = [
       {
         name: '条形图',
         chart: 'BaseBar',
+        url: 'fetchBaseChart',
       }, {
         name: '堆叠条形图',
         chart: 'StacBar',

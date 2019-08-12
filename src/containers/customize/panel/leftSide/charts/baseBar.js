@@ -1,52 +1,7 @@
 import React, {Component} from 'react';
 import echarts from 'echarts';
-import {Modal, Form, Table, Input, InputNumber} from 'antd';
-
-const EditableContext = React.createContext();
-class EditableCell extends React.Component {
-  getInput = () => {
-    if (this.props.inputType === 'number') {
-      return <InputNumber />;
-    }
-    return <Input />;
-  };
-
-  renderCell = ({getFieldDecorator}) => {
-    const {
-      editing,
-      dataIndex,
-      title,
-      inputType,
-      record,
-      index,
-      children,
-      ...restProps
-    } = this.props;
-    return (
-      <td {...restProps}>
-        {editing ? (
-          <Form.Item style={{margin: 0}}>
-            {getFieldDecorator(dataIndex, {
-              rules: [
-                {
-                  required: true,
-                  message: `Please Input ${title}!`,
-                },
-              ],
-              initialValue: record[dataIndex],
-            })(this.getInput())}
-          </Form.Item>
-        ) : (
-          children
-        )}
-      </td>
-    );
-  };
-
-  render() {
-    return <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>;
-  }
-}
+import {Modal} from 'antd';
+import EditableTable from './table'
 
 
 export default class Charts extends Component {
@@ -60,7 +15,8 @@ export default class Charts extends Component {
   }
   componentDidMount() {
     const data = [];
-    this.renderChart(data);
+    const { sourceData } = this.props
+    this.renderChart(sourceData);
   }
   renderChart(dataSet) {
     this.myChart = echarts.init(document.getElementById(`chart${this.props.id}`));
@@ -132,9 +88,7 @@ export default class Charts extends Component {
           onCancel={this.handleCancel}
           onOk={this.handleOk}
         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+        <EditableTable/>
         </Modal>
         <div className="widget grid-stack-item-content">
           <div className="widget-header">

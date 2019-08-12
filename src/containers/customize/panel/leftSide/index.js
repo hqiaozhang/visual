@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {guid} from '@/util/util';
+import {fetch}from '@/util/request';
 import {menuData} from './data';
 import './index.scss';
 import * as BarCharts from './charts/index';
-
-
+ 
 const mapStateToProps = ({customizeSeting}) => ({
   uuid: customizeSeting.uuid
 });
@@ -16,24 +15,63 @@ class LeftSide extends Component {
     super(props);
     this.state = {
       menuData,
-      chartsDom: [1]
+      componnetArray: [1],
+      loading: false,
     };
   }
-  renderChartsComponents(type, id) {
+  addComponent = () => {
+    let arr = [...this.state.componnetArray];
+    arr.push(1);
+    console.log('arr', arr)
+    this.setState({
+        componnetArray: arr,
+       
+    })
+  }
+  /**
+   * @description 渲染图表组件
+   * @param {*} item
+   * @param {*} id
+   */
+  renderChartsComponents(item, id) {
+    fetch(item.url || 'fetchBaseChart', (data) => {
+      this.setState({
+        loading: true,
+      })
+      return this.chartsType(item.chart, id, data) 
+    })
+     
+    // const data = []
+    // return this.chartsType(item.chart, id, data)
+   
+  }
+  /**
+   * @description 图表类型
+   * @param {*} type
+   * @returns 
+   */
+  chartsType(type, id, data) {
     switch (type) {
       case 'BaseBar':
-        return <BarCharts.BaseBar id={id} />;
+        return <BarCharts.BaseBar id={id} sourceData={data} />;
       case 'StacBar':
-        return <BarCharts.StacBar id={id} />;
+        return <BarCharts.StacBar id={id} sourceData={data} />;
       case 'tacBar':
-        return <BarCharts.StacBar id={id} />;
+        return <BarCharts.StacBar id={id} sourceData={data} />;
       default:
-        return <BarCharts.StacBar id={id} />;
+        return <BarCharts.StacBar id={id} sourceData={data} />;
     }
-  }
+  } 
+  /**
+   * @description 拖动结束
+   * @param {*} index
+   * @param {*} parentIndex
+   * @param {*} ev
+   */
   dragEnd(index, parentIndex, ev) {
     ev.preventDefault();
     this.props.dispatch({type: 'UPDATEUUID'});
+    this.setSubMenuData(index, parentIndex, false);
   }
   dragOver(ev) {
     ev.preventDefault();
@@ -42,17 +80,22 @@ class LeftSide extends Component {
    * @description 开始拖拽
    */
   drag = (index, parentIndex, uuid, ev) => {
+    this.addComponent()
     const curmenu = this.state.menuData; // 给对象赋值出来
     const isShow = curmenu[parentIndex].children[index].show; // 在新对象里面修改，然后赋值给需要改变的对象
-    console.log(index, parentIndex, isShow);
-    if (document.getElementById(`grid${uuid}`) || isShow === false) {
-      // ev.target.remveChild(document.getElementById(`grid${uuid}`));
+    if (isShow === false || !this.state.loading) {
       return;
     }
     this.setSubMenuData(index, parentIndex, true);
-
     ev.dataTransfer.setData('Text', `grid${uuid}`);
   }
+
+  /**
+   * @description 设置菜单
+   * @param {Number}  index
+   * @param {Number}  parentIndex
+   * @param {Boolean} flag
+   */
   setSubMenuData(index, parentIndex, flag) {
     const curmenu = this.state.menuData; // 给对象赋值出来
     curmenu[parentIndex].children[index].show = flag; // 在新对象里面修改，然后赋值给需要改变的对象
@@ -78,14 +121,6 @@ class LeftSide extends Component {
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.uuid !== this.props.uuid) {
-      const {parentIndex, subIndex} = this.state;
-      console.log('parentIndex, subIndex', parentIndex, subIndex);
-      const curmenu = this.state.menuData; // 给对象赋值出来
-      console.log('xxxxx', curmenu[parentIndex].children[subIndex].show);
-
-      // this.setState({
-      //   menuData: curmenu
-      // });
     }
   }
   /**
@@ -96,7 +131,7 @@ class LeftSide extends Component {
    */
   renderChildrenMemu(data, icon, parentIndex) {
     const {uuid} = this.props;
-    // const {chartsDom} = this.state;
+ 
     return data.map((item, i) => (
       <li
         id={`column${i}`}
@@ -108,11 +143,14 @@ class LeftSide extends Component {
         className="chart-item"
         key={i}
       >
+       
         <a className="sidemenu-item">
           <span className={`sidemenu-icon fa ${icon}`} />
           <span className="sidemenu-text">{item.name}</span>
+          {this.state.loading}
         </a>
-        {item.show ? this.renderChartsComponents(item.chart, uuid + i) : ''}
+ 
+        {item.show && this.state.loading ? this.state.componnetArray.map(() => this.renderChartsComponents(item, uuid + i)) : ''}
       </li>
     ));
   }
