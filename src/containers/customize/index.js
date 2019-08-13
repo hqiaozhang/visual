@@ -4,7 +4,7 @@
  * @Email: 991034150@qq.com
  * @Description: 自定义
  * @Last Modified by: zhanghongqiao
- * @Last Modified time: 2019-08-12 16:54:55
+ * @Last Modified time: 2019-08-13 13:03:06
  */
 
 import React, {Component} from 'react';
@@ -13,12 +13,14 @@ import {Header, LeftSide} from './panel';
 import EditableTable from './panel/leftSide/charts/table'
 import './index.scss';
 
+const mapStateToProps = ({customizeSeting}) => ({
+  uuid: customizeSeting.uuid
+});
+
 class Customize extends Component {
- 
+  
   dragOver(ev) {
- 
     ev.preventDefault();
-    
   }
   dragEnd(ev) {
     console.log('xxxx')
@@ -26,6 +28,7 @@ class Customize extends Component {
   drop(ev) {
     ev.preventDefault();
     const data = ev.dataTransfer.getData('Text');
+    console.log('data', data)
     if (!data) {
       return;
     }
@@ -48,4 +51,4 @@ class Customize extends Component {
   }
 }
 
-export default connect()(Customize);
+export default connect(mapStateToProps)(Customize);

@@ -15,13 +15,14 @@ class LeftSide extends Component {
     super(props);
     this.state = {
       menuData,
-      componnetArray: [1],
+      componnetArray: [],
       loading: false,
+      chartData: []
     };
   }
-  addComponent = () => {
+  addComponent = (id) => {
     let arr = [...this.state.componnetArray];
-    arr.push(1);
+    arr.push(id);
     console.log('arr', arr)
     this.setState({
         componnetArray: arr,
@@ -34,15 +35,11 @@ class LeftSide extends Component {
    * @param {*} id
    */
   renderChartsComponents(item, id) {
-    fetch(item.url || 'fetchBaseChart', (data) => {
-      this.setState({
-        loading: true,
-      })
-      return this.chartsType(item.chart, id, data) 
-    })
+   
      
-    // const data = []
-    // return this.chartsType(item.chart, id, data)
+    const data = []
+    // console.log('dd', this.state.chartData)
+    return this.chartsType(item.chart, id, data)
    
   }
   /**
@@ -70,8 +67,8 @@ class LeftSide extends Component {
    */
   dragEnd(index, parentIndex, ev) {
     ev.preventDefault();
+   
     this.props.dispatch({type: 'UPDATEUUID'});
-    this.setSubMenuData(index, parentIndex, false);
   }
   dragOver(ev) {
     ev.preventDefault();
@@ -79,15 +76,34 @@ class LeftSide extends Component {
   /**
    * @description 开始拖拽
    */
-  drag = (index, parentIndex, uuid, ev) => {
-    this.addComponent()
-    const curmenu = this.state.menuData; // 给对象赋值出来
-    const isShow = curmenu[parentIndex].children[index].show; // 在新对象里面修改，然后赋值给需要改变的对象
-    if (isShow === false || !this.state.loading) {
-      return;
-    }
+  drag = (item, index, parentIndex, uuid, ev) => {
+    // ev.persist()
+    
     this.setSubMenuData(index, parentIndex, true);
+    this.addComponent(uuid)
+    console.log(document.getElementById(`grid${uuid}`), uuid)
+    if(!document.getElementById(`grid${uuid}`)) {
+      return
+    }
     ev.dataTransfer.setData('Text', `grid${uuid}`);
+    //  fetch(item.url || 'fetchBaseChart', (data) => {
+    //     this.setState({
+    //       loading: true,
+    //       chartData: data,
+    //     })
+    //     // this.addComponent(uuid)
+    //     // const curmenu = this.state.menuData; // 给对象赋值出来
+    //     // const isShow = curmenu[parentIndex].children[index].show; // 在新对象里面修改，然后赋值给需要改变的对象
+    //     // if (isShow === false) {
+    //     //   return;
+    //     // }
+    //     // this.setSubMenuData(index, parentIndex, true);
+    //     // console.log(document.getElementById(`grid${uuid}`))
+    //     // ev.dataTransfer.setData('Text', `grid${uuid}`);
+        
+    // })
+
+   
   }
 
   /**
@@ -139,18 +155,22 @@ class LeftSide extends Component {
         onDragOver={this.dragOver.bind(this)}
         onDragEnd={this.dragEnd.bind(this, i, parentIndex)}
         data-uuid={uuid}
-        onDragStart={this.drag.bind(this, i, parentIndex, uuid + i)}
+        onDragStart={this.drag.bind(this, item,  i, parentIndex, uuid + i)}
         className="chart-item"
-        key={i}
-      >
+        key={i} >
        
         <a className="sidemenu-item">
           <span className={`sidemenu-icon fa ${icon}`} />
           <span className="sidemenu-text">{item.name}</span>
           {this.state.loading}
         </a>
- 
-        {item.show && this.state.loading ? this.state.componnetArray.map(() => this.renderChartsComponents(item, uuid + i)) : ''}
+        {/* {item.show? this.state.componnetArray.map((id) => this.renderChartsComponents(item, uuid + i)   ) : ''} */}
+        {item.show? this.state.componnetArray.map((id) => 
+         {
+           console.log(uuid + i == id, uuid + i , id)
+          return uuid + i == id ? this.renderChartsComponents(item, uuid + i) : ''
+         }
+          ) : ''}
       </li>
     ));
   }
