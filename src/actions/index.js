@@ -2,8 +2,8 @@ import {fetch} from '@/util/request';
 import * as types from './types';
 
 // 请求成功
-const studyunitSuccess = (data) => ({
-  type: types.STUDYUNITSUCCESS,
+const chartDataSuccess = (data) => ({
+  type: 'CHARTDATASUCCESS',
   data,
 });
 
@@ -20,17 +20,8 @@ const requestFailed = (data) => ({
 });
 
 // 查询单元
-export const rquestStudyunit = (id) => dispatch => fetch(`fetchStudyunit${id}`, (data) => {
-  dispatch(studyunitSuccess(data));
+export const chartDataRequest = (url) => dispatch => fetch(url, (data) => {
+  dispatch(chartDataSuccess(data));
 });
 
-// 查询单元详情
-export const requestStudyunitDetails = (id) => dispatch => fetch(`fetchUnitDetails${id}`, (data) => {
-  dispatch(studyunitDetailsSuccess(data));
-});
-
-
-export const changeCurrentLevel = (level) => ({
-  type: 'CHANGECURRENTLEVEL',
-  level,
-});
+ 

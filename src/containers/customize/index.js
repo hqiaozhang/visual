@@ -4,7 +4,7 @@
  * @Email: 991034150@qq.com
  * @Description: 自定义
  * @Last Modified by: zhanghongqiao
- * @Last Modified time: 2019-08-13 13:03:06
+ * @Last Modified time: 2019-08-14 09:13:01
  */
 
 import React, {Component} from 'react';
@@ -13,8 +13,8 @@ import {Header, LeftSide} from './panel';
 import EditableTable from './panel/leftSide/charts/table'
 import './index.scss';
 
-const mapStateToProps = ({customizeSeting}) => ({
-  uuid: customizeSeting.uuid
+const mapStateToProps = ({customize}) => ({
+  uuid: customize.uuid
 });
 
 class Customize extends Component {

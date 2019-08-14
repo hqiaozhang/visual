@@ -4,7 +4,7 @@
  * @Email: 991034150@qq.com
  * @Description: 我的课程
  * @Last Modified by: zhanghongqiao
- * @Last Modified time: 2019-07-26 14:06:32
+ * @Last Modified time: 2019-08-14 09:10:41
  */
 
 import {guid} from '@/util/util';
@@ -24,6 +24,10 @@ export default function reducer(state = initialState, action = {}) {
       return Object.assign({}, state, {
         uuid: guid()
       });
+    case 'CHARTDATASUCCESS': // 获取图表数据
+    return Object.assign({}, state, {
+      chartData: action.data
+    });
     default:
       return state;
   }

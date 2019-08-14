@@ -4,9 +4,13 @@ import {fetch}from '@/util/request';
 import {menuData} from './data';
 import './index.scss';
 import * as BarCharts from './charts/index';
+import {
+  chartDataRequest
+} from '@/actions';
  
-const mapStateToProps = ({customizeSeting}) => ({
-  uuid: customizeSeting.uuid
+const mapStateToProps = ({customize}) => ({
+  uuid: customize.uuid,
+  chartData: customize.chartData
 });
 
 
@@ -23,10 +27,8 @@ class LeftSide extends Component {
   addComponent = (id) => {
     let arr = [...this.state.componnetArray];
     arr.push(id);
-    console.log('arr', arr)
     this.setState({
         componnetArray: arr,
-       
     })
   }
   /**
@@ -35,11 +37,7 @@ class LeftSide extends Component {
    * @param {*} id
    */
   renderChartsComponents(item, id) {
-   
-     
-    const data = []
-    // console.log('dd', this.state.chartData)
-    return this.chartsType(item.chart, id, data)
+    return this.chartsType(item.chart, id, this.props.chartData)
    
   }
   /**
@@ -78,13 +76,10 @@ class LeftSide extends Component {
    */
   drag = (item, index, parentIndex, uuid, ev) => {
     // ev.persist()
-    
-    this.setSubMenuData(index, parentIndex, true);
+    // 获取图表数据
+    this.props.dispatch(chartDataRequest(item.url))
     this.addComponent(uuid)
-    console.log(document.getElementById(`grid${uuid}`), uuid)
-    if(!document.getElementById(`grid${uuid}`)) {
-      return
-    }
+    this.setSubMenuData(index, parentIndex, true);
     ev.dataTransfer.setData('Text', `grid${uuid}`);
     //  fetch(item.url || 'fetchBaseChart', (data) => {
     //     this.setState({
@@ -164,13 +159,7 @@ class LeftSide extends Component {
           <span className="sidemenu-text">{item.name}</span>
           {this.state.loading}
         </a>
-        {/* {item.show? this.state.componnetArray.map((id) => this.renderChartsComponents(item, uuid + i)   ) : ''} */}
-        {item.show? this.state.componnetArray.map((id) => 
-         {
-           console.log(uuid + i == id, uuid + i , id)
-          return uuid + i == id ? this.renderChartsComponents(item, uuid + i) : ''
-         }
-          ) : ''}
+        {item.show? this.state.componnetArray.map((id) => this.renderChartsComponents(item, uuid + i)) : ''}
       </li>
     ));
   }

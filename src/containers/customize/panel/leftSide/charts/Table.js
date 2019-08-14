@@ -36,6 +36,7 @@ class EditableCell extends React.Component {
     });
   };
 
+ 
   renderCell = form => {
     this.form = form;
     const { children, dataIndex, record, title } = this.props;
@@ -108,6 +109,8 @@ export default class EditableTable extends React.Component {
       {
         title: 'value',
         dataIndex: 'value',
+        width: '30%',
+        editable: true,
       },
       {
         title: 'operation',
@@ -122,19 +125,8 @@ export default class EditableTable extends React.Component {
     
     this.state = {
       currentIndex: 1,  //初始化的下标
-      dataSource: [
-        {
-          key: '0',
-          name: 'Mon',
-          value: '32',
-        },
-        {
-          key: '1',
-          name: 'Tue',
-          value: '32',
-        },
-      ],
-      count: 2,
+      dataSource: [],
+      count: 0,
     };
     this.pagination={
       onChange:(page, pageSize)=>{
@@ -143,15 +135,37 @@ export default class EditableTable extends React.Component {
         })
       }
     }
-
   }
+  componentDidMount() {
+    const dataSource = this.props.sourceData.map((item, index) => Object.assign({}, {key: index}, item))
+    this.setState({
+      dataSource: dataSource,
+      count: dataSource.length + 1
+    })
+  }
+  
   /**
    * @description 删除
    */
   handleDelete = key => {
     const dataSource = [...this.state.dataSource];
     this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
-  };
+    let timer = setTimeout(() => {
+      this.props.pfn(this.state.dataSource)
+      clearTimeout(timer)
+    })
+    // this.setState(() => {
+    //   return {dataSource: dataSource.filter(item => item.key !== key)}
+    // }),() => {
+
+    //   this.props.pfn(this.state.dataSource)
+    // }  
+    // this.setState(({value}=>{
+    //   value:value+1
+    // }),()=>{
+    //     console.log(this.state.value);
+    // });
+  }
   /**
    * @description 新增 
    */
@@ -159,14 +173,20 @@ export default class EditableTable extends React.Component {
     const { count, dataSource } = this.state;
     const newData = {
       key: count,
+      id: count,
       name: `new ${count}`,
       value: 0,
     };
+ 
     this.setState({
       dataSource: [...dataSource, newData],
       count: count + 1,
     });
-  };
+    let timer = setTimeout(() => {
+      this.props.pfn(this.state.dataSource)
+      clearTimeout(timer)
+    })
+  }
 
   handleSave = row => {
     const newData = [...this.state.dataSource];
@@ -177,11 +197,14 @@ export default class EditableTable extends React.Component {
       ...row,
     });
     this.setState({ dataSource: newData });
-  };
+    this.props.pfn(newData)
+  }
   
-
   render() {
     const { dataSource } = this.state;
+    if(dataSource.length == 0) {
+      return ''
+    }
     const components = {
       body: {
         row: EditableFormRow,
@@ -207,6 +230,7 @@ export default class EditableTable extends React.Component {
       <div>
         <Button onClick={this.handleAdd.bind(this)} type="primary" style={{ marginBottom: 16 }}> 新增 </Button>
         <Table
+      
           components={components}
           rowClassName={() => 'editable-row'}
           bordered
