@@ -1,35 +1,21 @@
 import React, {Component} from 'react';
 import echarts from 'echarts';
-import {Modal} from 'antd';
-import EditableTable from './table'
-
-
+ 
 export default class Charts extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      visible: false,
-      editData: [],
-    };
     this.myChart = null;
     this.options = {};
   }
   
   componentDidMount() {
     const { sourceData } = this.props
-    
     if(!sourceData) {
       return
     }
-    this.setState({
-      editData: sourceData
-    })
     this.setChartData(sourceData);
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      editData: nextProps.sourceData
-    })
     this.setChartData(nextProps.sourceData);
   }
   /**
@@ -91,68 +77,9 @@ export default class Charts extends Component {
     };
     this.myChart.setOption(this.options);
   }
-  /**
-   * @description 显示弹窗
-   */
-  showModal() {
-    this.setState({
-      visible: true,
-    });
-  }
-  /**
-   * @description 点击取消
-   */
-  handleCancel = e => {
-    this.setState({
-      visible: false,
-    });
-  }
-  handleDel = ev => {
-    document.getElementById(`grid${this.props.id}`).remove()
-  }
-  /**
-   * @description 点击ok
-   */
-  handleOk = e => {
-    this.setState({
-      visible: false,
-    });
-    this.setChartData(this.state.editData)
-  }
-  /**
-   * @description 获取子组件数据
-   * @param {*} data
-   */
-  getChildData(data) {
-    this.setState({
-      editData: data
-    })
-  }
   render() {  
     return (
-      <div className="grid-stack-placeholder grid-stack-item" id={`grid${this.props.id}`} style={{display: 'none'}}>
-        <Modal
-          title="修改图表数据"
-          visible={this.state.visible}
-          onCancel={this.handleCancel}
-          okText="确认"
-          cancelText="取消"
-          onOk={this.handleOk}
-        >
-        <EditableTable  pfn={this.getChildData.bind(this)} handleSave={this.handleSave} sourceData={this.state.editData} />
-        </Modal>
-        <div className="widget grid-stack-item-content">
-          <div className="widget-header">
-            <div className="title" />
-            <span className="tools">
-              <a onClick={this.showModal.bind(this)} className="fa fa-edit reset-btn" title="编辑数据" />
-              <a onClick={this.handleDel.bind(this)} className="fa fa-close close-btn" title="删除" />
-            </span>
-          </div>
-          <div id={`chart${this.props.id}`} style={{width: 300, height: 320}} />
-          <div className="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style={{zZndex: 90}} />
-        </div>
-      </div>
+      <div id={`chart${this.props.id}`} style={{width: 300, height: 320}} />
     );
   }
 }

@@ -4,13 +4,12 @@
  * @Email: 991034150@qq.com
  * @Description: 自定义
  * @Last Modified by: zhanghongqiao
- * @Last Modified time: 2019-08-14 09:13:01
+ * @Last Modified time: 2019-08-26 16:40:47
  */
 
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Header, LeftSide} from './panel';
-import EditableTable from './panel/leftSide/charts/table'
 import './index.scss';
 
 const mapStateToProps = ({customize}) => ({
@@ -28,7 +27,6 @@ class Customize extends Component {
   drop(ev) {
     ev.preventDefault();
     const data = ev.dataTransfer.getData('Text');
-    console.log('data', data)
     if (!data) {
       return;
     }
@@ -41,7 +39,6 @@ class Customize extends Component {
         <Header />
         <LeftSide />
         <div className="main" >
-        {/* <EditableTable/> */}
           <div id="graph-panel" className="container-fluid" >
             <div id="chart-wrap" className="grid-stack" onDrop={this.drop.bind(this)} onDragEnd={this.dragEnd.bind(this)} onDragOver={this.dragOver.bind(this)} />
           </div>

@@ -10,6 +10,7 @@ const menuData = [
       }, {
         name: '堆叠条形图',
         chart: 'StacBar',
+        url: '',
       }, {
         name: '柱状图'
       }, {

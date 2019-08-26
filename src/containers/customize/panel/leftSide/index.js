@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {fetch}from '@/util/request';
+ 
 import {menuData} from './data';
-import './index.scss';
-import * as BarCharts from './charts/index';
+import './styles/index.scss';
+import ChartPanel from './chartPanel'
 import {
   chartDataRequest
 } from '@/actions';
@@ -37,26 +37,11 @@ class LeftSide extends Component {
    * @param {*} id
    */
   renderChartsComponents(item, id) {
-    return this.chartsType(item.chart, id, this.props.chartData)
-   
+    return <div className="grid-stack-placeholder grid-stack-item" style={{display: 'none'}} id={`grid${id}`} key={id}>
+            <ChartPanel chartType={item.chart} id={id} sourceData={this.props.chartData} />
+          </div> 
   }
-  /**
-   * @description 图表类型
-   * @param {*} type
-   * @returns 
-   */
-  chartsType(type, id, data) {
-    switch (type) {
-      case 'BaseBar':
-        return <BarCharts.BaseBar id={id} sourceData={data} />;
-      case 'StacBar':
-        return <BarCharts.StacBar id={id} sourceData={data} />;
-      case 'tacBar':
-        return <BarCharts.StacBar id={id} sourceData={data} />;
-      default:
-        return <BarCharts.StacBar id={id} sourceData={data} />;
-    }
-  } 
+
   /**
    * @description 拖动结束
    * @param {*} index
@@ -77,27 +62,10 @@ class LeftSide extends Component {
   drag = (item, index, parentIndex, uuid, ev) => {
     // ev.persist()
     // 获取图表数据
-    this.props.dispatch(chartDataRequest(item.url))
+    this.props.dispatch(chartDataRequest(item.url || 'fetchBaseChart'))
     this.addComponent(uuid)
     this.setSubMenuData(index, parentIndex, true);
     ev.dataTransfer.setData('Text', `grid${uuid}`);
-    //  fetch(item.url || 'fetchBaseChart', (data) => {
-    //     this.setState({
-    //       loading: true,
-    //       chartData: data,
-    //     })
-    //     // this.addComponent(uuid)
-    //     // const curmenu = this.state.menuData; // 给对象赋值出来
-    //     // const isShow = curmenu[parentIndex].children[index].show; // 在新对象里面修改，然后赋值给需要改变的对象
-    //     // if (isShow === false) {
-    //     //   return;
-    //     // }
-    //     // this.setSubMenuData(index, parentIndex, true);
-    //     // console.log(document.getElementById(`grid${uuid}`))
-    //     // ev.dataTransfer.setData('Text', `grid${uuid}`);
-        
-    // })
-
    
   }
 
@@ -116,7 +84,7 @@ class LeftSide extends Component {
       parentIndex
     });
   }
-
+ 
 
   /**
    * @description 点击菜单
@@ -142,7 +110,7 @@ class LeftSide extends Component {
    */
   renderChildrenMemu(data, icon, parentIndex) {
     const {uuid} = this.props;
- 
+
     return data.map((item, i) => (
       <li
         id={`column${i}`}
@@ -152,14 +120,17 @@ class LeftSide extends Component {
         data-uuid={uuid}
         onDragStart={this.drag.bind(this, item,  i, parentIndex, uuid + i)}
         className="chart-item"
-        key={i} >
+        key={i}>
        
         <a className="sidemenu-item">
           <span className={`sidemenu-icon fa ${icon}`} />
           <span className="sidemenu-text">{item.name}</span>
           {this.state.loading}
         </a>
-        {item.show? this.state.componnetArray.map((id) => this.renderChartsComponents(item, uuid + i)) : ''}
+        {item.show ? this.state.componnetArray.map((id) => {
+          return this.renderChartsComponents(item, id)
+          // return this.state.componnetArray.includes( uuid + i) ? this.renderChartsComponents(item, id) : ''
+        }) : ''}
       </li>
     ));
   }
@@ -167,7 +138,6 @@ class LeftSide extends Component {
   render() {
     return (
       <div id="menu" className="main-sidebar sidemenu">
-
         <div className="menu-btn">
           <i className="fa fa-fw fa-dedent" />
         </div>
