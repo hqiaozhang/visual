@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "antd": "^3.20.6",
-    "axios": "^0.17.1",
+    "axios": "^0.21.1",
     "echarts": "^4.2.1",
     "mockjs": "^1.0.1-beta3",
     "react": "^16.2.0",
